@@ -1,9 +1,9 @@
-import java.io.File
+package day01
 
 fun main() {
 
     val rotations = object {}.javaClass
-        .getResource("/input")
+        .getResource("/day01/input.txt")
         ?.readText()
         ?.lines()
         ?.filter { it.isNotBlank() }
