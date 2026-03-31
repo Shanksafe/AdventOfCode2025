@@ -18,17 +18,17 @@ fun main() {
         val direction = rotation[0]
         val distance = rotation.substring(1).toInt()
 
-        if(direction == 'L'){
-            position -= distance
-        } else if(direction == 'R'){
-            position += distance
+        repeat(distance){
+            if(direction == 'L'){
+                position -= 1
+            } else if(direction == 'R'){
+                position += 1
+            }
+            position = (position % 100 + 100) % 100
+            if(position == 0){
+                zeroCounter += 1
+            }
         }
-
-        position = (position % 100 + 100) % 100
-        if(position == 0){
-            zeroCounter += 1
-        }
-
 
         println("After $rotation, position is $position")
     }
