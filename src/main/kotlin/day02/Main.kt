@@ -15,9 +15,15 @@ fun isInvalid(number: Long): Boolean {
 }
 
 fun main() {
-    val input = "11-22,95-115,998-1012,1188511880-1188511890,222220-222224,1698522-1698528,446443-446449,38593856-38593862,565653-565659,824824821-824824827,2121212118-2121212124"
+
+    val input = object {}.javaClass
+        .getResource("/day02/input.txt")
+        ?.readText()
+        ?: error("File not found")
 
     val ranges = input.split(",")
+
+    var total = 0L
 
     for (range in ranges) {
         val parts = range.split("-")
@@ -28,7 +34,12 @@ fun main() {
         println("Range: $start to $end")
 
         for (number in start..end) {
-            println(number)
+            if (isInvalid(number)) {
+                println("Invalid ID: $number")
+                total += number
+            }
         }
     }
+
+    println("Total: $total")
 }
