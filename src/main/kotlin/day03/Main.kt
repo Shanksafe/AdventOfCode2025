@@ -1,19 +1,16 @@
 package day03
 
 fun main() {
-    val input = """
-        987654321111111
-        811111111111119
-        234234234234278
-        818181911112111
-    """.trimIndent()
+    val banks = object {}.javaClass
+        .getResource("/day03/input.txt")
+        ?.readText()
+        ?.lines()
+        ?.filter { it.isNotBlank() }
+        ?: error("File not found")
 
-    val banks = input.lines()
     var total = 0
 
     for (bank in banks) {
-        println("Bank: $bank")
-
         val digits = bank.toCharArray()
         var best = 0
 
