@@ -8,27 +8,35 @@ fun main() {
         ?.filter { it.isNotBlank() }
         ?: error("File not found")
 
-    var total = 0
+    var total = 0L
 
     for (bank in banks) {
-        val digits = bank.toCharArray()
-        var best = 0
+        val digitsToKeep = 12
+        require(bank.length >= digitsToKeep) { "Bank is too short: $bank" }
 
-        for (i in digits.indices) {
-            for (j in i + 1 until digits.size) {
-                val first = digits[i]
-                val second = digits[j]
+        var digitsToDrop = bank.length - digitsToKeep
+        val result = mutableListOf<Char>()
 
-                val value = "$first$second".toInt()
-
-                if (value > best) {
-                    best = value
-                }
+        for (digit in bank) {
+            while (
+                result.isNotEmpty() &&
+                digitsToDrop > 0 &&
+                result.last() < digit
+            ) {
+                result.removeAt(result.lastIndex)
+                digitsToDrop--
             }
+
+            result.add(digit)
         }
 
-        println("Best for this bank: $best")
-        total += best
+        while (digitsToDrop > 0) {
+            result.removeAt(result.lastIndex)
+            digitsToDrop--
+        }
+
+        val best = result.joinToString("")
+        total += best.toLong()
     }
 
     println("Total output joltage: $total")
