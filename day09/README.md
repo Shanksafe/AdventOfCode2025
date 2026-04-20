@@ -1,6 +1,6 @@
 # Day 9
 ## Summary
-
+Forgot to write Part 2 was already completed
 ## Part 1
 I checked every pair of red tiles and treated them as opposite corners of a rectangle.
 For each pair, I calculated the tile area using `(abs(x1 - x2) + 1) * (abs(y1 - y2) + 1)` 
