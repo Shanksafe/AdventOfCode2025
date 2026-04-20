@@ -24,44 +24,47 @@ fun main() {
         error("No S found in the top row")
     }
 
-    // active[col] = is there currently a beam in this column?
-    var active = BooleanArray(width)
-    active[startCol] = true
-
-    var totalSplits = 0L
+    // timelines[col] = how many timelines are currently at this column
+    var timelines = LongArray(width)
+    timelines[startCol] = 1L
 
     // Go through the grid row by row
     for (row in lines.indices) {
-        val nextActive = BooleanArray(width)
+        val nextTimelines = LongArray(width)
 
         for (col in 0 until width) {
 
-            // If there is no beam here, skip it
-            if (!active[col]) {
+            val currentCount = timelines[col]
+
+            // If there are no timelines here, skip it
+            if (currentCount == 0L) {
                 continue
             }
 
             val ch = lines[row][col]
 
             if (ch == '.' || ch == 'S') {
-                // Beam continues straight down
-                nextActive[col] = true
+                // All timelines keep going straight down
+                nextTimelines[col] += currentCount
             } else if (ch == '^') {
-                // Beam splits here
-                totalSplits++
-
+                // Timelines split left and right
                 if (col - 1 >= 0) {
-                    nextActive[col - 1] = true
+                    nextTimelines[col - 1] += currentCount
                 }
 
                 if (col + 1 < width) {
-                    nextActive[col + 1] = true
+                    nextTimelines[col + 1] += currentCount
                 }
             }
         }
 
-        active = nextActive
+        timelines = nextTimelines
     }
 
-    println("Total splits: $totalSplits")
+    var total = 0L
+    for (count in timelines) {
+        total += count
+    }
+
+    println("Total timelines: $total")
 }
