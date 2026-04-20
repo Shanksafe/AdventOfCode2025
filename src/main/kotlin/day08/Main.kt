@@ -21,7 +21,7 @@ fun main() {
 
     val pairs = mutableListOf<Edge>()
 
-    // Compare every pair of junction boxes
+    // Build every possible pair of points
     for (i in 0 until points.size) {
         for (j in i + 1 until points.size) {
             val p1 = points[i]
@@ -43,29 +43,25 @@ fun main() {
     val parent = IntArray(points.size) { it }
     val size = IntArray(points.size) { 1 }
 
-    // Connect the 1000 closest pairs
-    val limit = minOf(1000, pairs.size)
+    var circuits = points.size
+    var answer = 0L
 
-    for (i in 0 until limit) {
-        val edge = pairs[i]
-        union(edge.a, edge.b, parent, size)
-    }
+    for (edge in pairs) {
+        val rootA = find(edge.a, parent)
+        val rootB = find(edge.b, parent)
 
-    // Count final circuit sizes
-    val circuitSizes = mutableListOf<Int>()
+        // Only connect if they are in different circuits
+        if (rootA != rootB) {
+            union(edge.a, edge.b, parent, size)
+            circuits--
 
-    for (i in points.indices) {
-        if (find(i, parent) == i) {
-            circuitSizes.add(size[i])
+            // If everything is now one circuit, this was the last needed connection
+            if (circuits == 1) {
+                answer = points[edge.a].x.toLong() * points[edge.b].x.toLong()
+                break
+            }
         }
     }
-
-    circuitSizes.sortDescending()
-
-    val answer =
-        circuitSizes[0].toLong() *
-                circuitSizes[1].toLong() *
-                circuitSizes[2].toLong()
 
     println("Answer: $answer")
 }

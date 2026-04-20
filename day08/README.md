@@ -11,3 +11,6 @@ pairs from shortest to longest. Then connect the first
 and multiplied them 3 largest sizes.
 
 ## Part 2
+For part 2, I kept connecting the shortest pairs using union-find
+until all junction boxes were in one circuit. When the final merge happened, 
+I multiplied the X coordinates of thSat last pair to get the answer.
