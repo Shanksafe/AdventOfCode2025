@@ -23,32 +23,47 @@ fun main() {
 
         graph.getOrPut(device) { mutableListOf() }.addAll(outputs)
 
-        // Make sure every mentioned node exists in the map
         for (next in outputs) {
             graph.getOrPut(next) { mutableListOf() }
         }
     }
 
-    val totalPaths = countPaths("you", graph)
+    val memo = HashMap<String, Long>()
+    val totalPaths = countPaths("svr", false, false, graph, memo)
 
-    println("Total paths: $totalPaths")
+    println("Total valid paths: $totalPaths")
 }
 
 fun countPaths(
     current: String,
-    graph: Map<String, List<String>>
+    seenDac: Boolean,
+    seenFft: Boolean,
+    graph: Map<String, List<String>>,
+    memo: HashMap<String, Long>
 ): Long {
+
+    val newSeenDac = seenDac || current == "dac"
+    val newSeenFft = seenFft || current == "fft"
+
+    val key = "$current|$newSeenDac|$newSeenFft"
+    val cached = memo[key]
+    if (cached != null) {
+        return cached
+    }
+
     if (current == "out") {
-        return 1L
+        val answer = if (newSeenDac && newSeenFft) 1L else 0L
+        memo[key] = answer
+        return answer
     }
 
     var total = 0L
-
     val neighbours = graph[current] ?: emptyList()
 
     for (next in neighbours) {
-        total += countPaths(next, graph)
+        total += countPaths(next, newSeenDac, newSeenFft, graph, memo)
     }
 
+    memo[key] = total
     return total
 }
